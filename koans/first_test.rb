@@ -8,4 +8,5 @@ class TestSomething < Test::Unit::TestCase
   end
 end
 
-
+t = TestSomething.new "something"
+t.test_assert()

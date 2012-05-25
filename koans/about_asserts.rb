@@ -37,4 +37,14 @@ class AboutAsserts < EdgeCase::Koan
   def test_fill_in_values
     assert_equal 2, 1 + 1
   end
+	
+  def derp(test, result)
+    begin
+      assert_equal test, result
+    rescue MiniTest::Assertion, ArgumentError => ass
+      ass
+    end
+  end
+	
 end
+
