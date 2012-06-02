@@ -4,7 +4,7 @@ class AboutExceptions < EdgeCase::Koan
 
   class MySpecialError < RuntimeError
 	self.ancestors.each do |e|
-		puts e
+		e
 	end
   end
 

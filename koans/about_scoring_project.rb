@@ -30,7 +30,74 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 # Your goal is to write the score method.
 
 def score(dice)
-  # You need to write this method
+
+	# score 5 single
+	def score_5
+		return 50
+	end
+
+	# score 1 single
+	def score_1
+		return 100
+	end
+
+	# score 3 set except if 1
+	def score_3_set(side = 0)
+  	return side * 100
+	end
+
+	# score 1 3 set, greed
+	def score_greed(the_roll = 0, roll_score = 0)
+		return 1000
+	end
+
+	# intialize an empty dice by nesting arrays into a hash
+  the_roll = Hash.new
+
+	# create the dice, see dice dump below block
+  (1...7).map { |side| the_roll["#{side}"] = [] }
+   the_roll.each { |side,amount|
+    dice.select { |value| the_roll["#{value}"].push(value) if value == side.to_i }
+  }
+	print "Dice init  ", the_roll.inspect, "\n"
+
+  roll_score = 0
+  roll_total = 0
+	# check how many times they rolled
+	print the_roll.inspect, "\n"
+  the_roll.each { |side,roll| roll_total += roll.count }
+
+    the_roll.each { |side,rolled|
+			if rolled.count >= 3 and (side.to_i != 1)
+				roll_score += score_3_set(side.to_i)
+				3.times { the_roll["#{side}"].pop }
+			elsif rolled.count >= 3 and (side.to_i == 1)
+				roll_score += score_greed(side.to_i)
+				3.times { the_roll["1"].pop }
+			end
+
+			if rolled.count >= 1 and side.to_i == 1
+				while not the_roll['1'].empty?
+					roll_score += score_1
+					the_roll['1'].pop
+				end
+			end
+
+			if rolled.count >= 1 and side.to_i == 5
+				while not the_roll['5'].empty?
+					roll_score += score_5
+					the_roll['5'].pop
+				end
+			end
+
+			print "Side ", side,"\n"
+			print "Rolled ", rolled,"\n"
+			print "The Roll", the_roll.inspect, "\n"
+			print "Score ", roll_score, "\n\n"
+    }
+    print roll_score
+    return roll_score
+	
 end
 
 class AboutScoringProject < EdgeCase::Koan
